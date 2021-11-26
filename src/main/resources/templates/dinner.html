@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand">
+            <a class="nav-link active" aria-current="page" th:href="@{/}">CookBookApp</a>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/breakfast}">Sniadanie</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/lunch}">Obiad</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/dinner}">Kolacja</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav form-inline my-2 my-lg-0">
+                <li th:if="${isLogged == true}" class="nav-item">
+                    <a class="nav-link active" th:href="@{/profile}">Profil</a>
+                </li>
+                <li th:if="${isLogged == true}" class="nav-item">
+                    <a class="nav-link active" th:href="@{/logout}">Wyloguj</a>
+                </li>
+                <li th:if="${isLogged == false}" class="nav-item">
+                    <a class="nav-link active" th:href="@{/login}">Logowanie</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<table class="table">
+    <tr>
+        <th></th>
+        <th style="text-align: center">Nazwa</th>
+        <th style="text-align: center">Opis</th>
+        <th style="text-align: center">Skladniki</th>
+        <th style="text-align: center">Kalorie</th>
+    </tr>
+    <th:block th:each="meal: ${dinner}">
+        <tr>
+            <td><img style="display: block; width: 100%" th:src="${'data:image/jpeg;charset=utf-8;base64,' + meal.uriAsBase64Image()}" alt=""></td>
+            <td style="text-align: center" th:text="${meal.name}"></td>
+            <td th:text="${meal.description}"></td>
+            <td th:text="${meal.ingredientsAsString()}"></td>
+            <td th:text="${meal.kcal}"></td>
+            <td th:if="${isLogged == true}">
+                <form th:action="@{/dinner}" method="POST">
+                    <button type="submit" th:name="id" th:value="${meal.id}" class="btn btn-success">Dodaj do panelu</button>
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+
+
+</body>
+</html>
